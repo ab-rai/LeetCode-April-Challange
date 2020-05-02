@@ -1,0 +1,62 @@
+/*
+Write an algorithm to determine if a number n is "happy".
+A happy number is a number defined by the following process: Starting with any positive integer, replace the number by the sum of the squares of its digits, and repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1. Those numbers for which this process ends in 1 are happy numbers.
+Return True if n is a happy number, and False if not.
+
+Example: 
+Input: 19
+Output: true
+Explanation: 
+12 + 92 = 82
+82 + 22 = 68
+62 + 82 = 100
+12 + 02 + 02 = 1
+*/
+
+// Approach 1 using a set as an extra spacee 
+class Solution {
+public:
+    int squareSum(int n)   // squareSum function returns the sum of square's of each digit of the number n
+    {
+        int sum=0;
+        while(n!=0)
+        {
+            int rem=n%10;
+            sum+= (rem*rem);
+            n/=10;
+        }
+        return sum;
+    }
+    bool isHappy(int n) {
+        set<int> st;    // set is used such that we could insert and lookup the number n in O(1) time
+       while(n!=1)
+        {
+            if(st.find(n)==st.end())  // if the number is not present in the set then we would insert it in the set
+                st.insert(n);
+            else return false;  // if the number is allready in the set this emplies that this number is the begining of the loop
+            n=squareSum(n);     // and so we would not be able to reach upto n=1 ever
+            
+        }
+        return true;
+    }
+};
+
+/*
+Time Complexity:- O(log n)  
+                  Since it takes log10 n times to calculate squareSum of a number and we have to calculate a fixed number of integers before
+                  the loop starts or we reached upto 1.(read the LeetCode's official solution for complete explanation)
+     
+Space Complexity:- O(1)
+                   Same, because we only need to store a fixed number of numbers in the set.
+
+
+Approach 2 We could also use the Floyd's Cycle Finding Algorithm which uses the hare(fast) and tortoise(slow) analogy to reach upto the
+             loop. 
+             
+             Step 1:-We use the squareSum function twice for the hare(fast) and once for tortoise(slow).
+             Step 2:-Repeat the step 1 until and unless either any of them is equal to 1 or both of them becomes equal.
+             Step 3:-If both are equal then there is a loop else we could reach upto 1.
+
+Time and space complexity is same as that of first approch since we are only savving the exstra space for set but it was O(1) 
+earlier also.
+*/
