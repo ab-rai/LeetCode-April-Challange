@@ -1,0 +1,48 @@
+/*
+Difficulty Rating= 6/10 (requires good observation + hashing concepts)
+Given an array of strings, group anagrams together.
+Example:
+Input: ["eat", "tea", "tan", "ate", "nat", "bat"],
+Output:
+[
+  ["ate","eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
+Note:
+    All inputs will be in lowercase.
+    The order of your output does not matter.
+*/
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        vector<vector<string>> ans;
+        if(strs.empty())
+            return ans;
+        map<string,vector<string> > mp;
+        
+        for(int i=0;i<strs.size();i++)
+        {
+            string currStr=strs[i];
+            sort(currStr.begin(),currStr.end()); // sorting the string since it is easier to compare sorted string
+            mp[currStr].push_back(strs[i]);      // when we need to check the anagram
+        }
+        for(pair<string,vector<string> > p:mp)
+        {
+            vector<string> smallAns;
+            for(string str:p.second)
+            {
+                smallAns.push_back(str);
+            }
+            ans.push_back(smallAns);
+        }
+        return ans;
+    }
+};
+
+/*
+Time Complexity:- O(nklog(k))
+Space Complexity:-O(nk)
+    Where n is the size of the array and k is the length of a string
+*/
