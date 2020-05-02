@@ -21,3 +21,6 @@ public:
         return ans;
     }
 };
+
+//Time Coplexity:- O(n)
+//Space Complexity:- O(1)
