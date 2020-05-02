@@ -1,0 +1,74 @@
+/*
+Difficulty:- 6/10 (requires good observation for min value to be fetched in O(1) )
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+push(x) -- Push element x onto stack.
+pop() -- Removes the element on top of the stack.
+top() -- Get the top element.
+getMin() -- Retrieve the minimum element in the stack.
+
+Example 1:
+Input
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+Output
+[null,null,null,null,-3,null,0,-2]
+*/
+
+class MinStack {
+    stack<int> st;
+    stack< pair<int,int> > mn;
+public:
+    void push(int x) {
+        if(st.empty())
+        {
+            st.push(x);
+            mn.push(make_pair(x,1));
+        }
+        else
+        {
+            int t=mn.top().first; 
+            st.push(x);
+            if(x<=t)
+            {
+                pair<int,int> tmn=mn.top();
+                if(tmn.first==x)
+                {
+                    tmn.second=tmn.second+1;
+                    mn.pop();
+                    mn.push(tmn);
+                }
+                else
+                {
+                    mn.push(make_pair(x,1));
+                }
+            }
+        }
+    }
+    
+    void pop() {
+           pair<int,int> tmn=mn.top();
+           if(st.top()==tmn.first)
+           {
+               if(tmn.second==1)
+                    mn.pop();
+               else
+               {
+                   mn.pop();
+                   tmn.second--;
+                   mn.push(tmn);
+               }
+           }
+         st.pop();
+    }
+    
+    int top() {
+        return st.top();
+    }
+    
+    int getMin() {
+        return mn.top().first;
+    }
+};
+//Time Complexity:- O(1) for each operation
+//Space Complexity:- O(n)
