@@ -1,0 +1,32 @@
+/*
+#Difficulty Level=6/10 (requires good hands on experience of recursive functions call )
+Given a binary tree, you need to compute the length of the diameter of the tree. The diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root.
+
+Note: The length of path between two nodes is represented by the number of edges between them.
+*/
+class Solution {
+public:
+    int findDiameter(TreeNode * root,int & mx)
+    {
+        if(root==NULL)  return 0;
+        if(root->left==NULL && root->right==NULL) // it means this is a leaf node
+        {
+            mx=max(mx,0); // max path lenth for leaf node is 0
+            return 1;
+        }
+        int leftMaxLen=findDiameter(root->left,mx);
+        int rightMaxLen=findDiameter(root->right,mx);
+        mx=max(mx,leftMaxLen+rightMaxLen); // adding the left and right lenth which is returned by the recursive call
+        return 1+(max(leftMaxLen,rightMaxLen));// returning maximum by adding 1 to the lenth of left and right since curr node is 
+    }                                          // also counted in the diameter
+    int diameterOfBinaryTree(TreeNode* root) {
+        int mx=0;
+        if(root==NULL)
+            return mx;
+        int len =findDiameter(root,mx);
+        return mx;
+    }
+};
+
+// Time Complexity:-O(n) each and every node is traversed once by the recursive call
+// Time Complexity:-O(h) recursive stack of size h is used by recursive call,where h is the height of the binary tree 
