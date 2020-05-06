@@ -1,0 +1,22 @@
+/*
+Given a binary array, find the maximum length of a contiguous subarray with equal number of 0 and 1.
+*/
+class Solution {
+public:
+    int findMaxLength(vector<int>& nums) {
+        int maxLen=0;
+        map<int,int> mp;
+        int cnt=0;
+        mp[0]=-1;
+        for(int i=0;i<nums.size();i++)
+        {
+            cnt=cnt+((nums[i]==1)?1:-1);
+            if(mp.find(cnt)!=mp.end())
+            {
+                maxLen=max(maxLen,i-mp[cnt]);
+            }
+            else mp[cnt]=i;
+        }
+        return maxLen;
+    }
+};
