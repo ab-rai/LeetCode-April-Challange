@@ -1,0 +1,64 @@
+/*
+Difficulty Level=6
+Given a string containing only three types of characters: '(', ')' and '*', write a function to check whether this 
+string is valid. We define the validity of a string by these rules:
+
+Any left parenthesis '(' must have a corresponding right parenthesis ')'.
+Any right parenthesis ')' must have a corresponding left parenthesis '('.
+Left parenthesis '(' must go before the corresponding right parenthesis ')'.
+'*' could be treated as a single right parenthesis ')' or a single left parenthesis '(' or an empty string.
+An empty string is also valid.
+*/
+
+class Solution {
+public:
+    bool checkValidString(string s) {
+        int starCnt=0;
+        stack<int > st;
+        stack<int> ststar;
+        
+        for(int i=0;i<s.size();i++)
+        {
+            if(s[i]=='*')
+            {
+                ststar.push(i);
+            }
+            else if(s[i]==')')
+            {
+                if(!st.empty())
+                {
+                    st.pop();
+                }
+                else if(!ststar.empty())
+                {
+                    ststar.pop();
+                }
+                else return false;
+            }
+            else st.push(i);
+        }
+        if(st.size()==0)
+            return true;
+        else 
+        {
+            while(!st.empty() && !ststar.empty())
+            {
+                if(st.top()<ststar.top())
+                {
+                    st.pop();
+                    ststar.pop();
+                        
+                }
+                else return false;
+            }
+            if(!st.empty())
+            {
+                return !ststar.empty();
+            }
+        }
+        return true;
+    }
+};
+
+//Time Complexity:-O(n)
+//Space Complexity:-O(n)
