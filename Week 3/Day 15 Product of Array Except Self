@@ -1,0 +1,30 @@
+/*
+Given an array nums of n integers where n > 1,  return an array output such that output[i] is equal
+to the product of all the elements of nums except nums[i].
+*/
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> ans(nums.size());
+        if(nums.size()==0)
+            return ans;
+        ans[0]=1;
+        int mul=1;
+        for(int i=1;i<nums.size();i++)
+        {
+            mul*=nums[i-1];
+            ans[i]=mul;
+        }
+        mul=1;
+        for(int i=nums.size()-2;i>=0;i--)
+        {
+            mul*=nums[i+1];
+            ans[i]*=mul;
+        }
+        return ans;
+    }
+};
+
+//Time Complexity:-O(n)
+//Space Complexity:-O(1)  ,ignoring the space of the returned vector
