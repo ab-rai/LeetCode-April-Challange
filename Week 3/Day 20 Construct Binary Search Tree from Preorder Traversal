@@ -1,0 +1,38 @@
+/*
+Difficulty Level=6
+Return the root node of a binary search tree that matches the given preorder traversal.
+(Recall that a binary search tree is a binary tree where for every node, any descendant of node.left has a value < node.val,
+and any descendant of node.right has a value > node.val.  Also recall that a preorder traversal displays the value of the node first,
+then traverses node.left, then traverses node.right.)
+It's guaranteed that for the given test cases there is always possible to find a binary search tree with the given requirements.
+*/
+// Input: [8,5,1,7,10,12]
+// Output: [8,5,10,1,7,null,12]
+class Solution {
+public:
+    TreeNode * helper(vector<int>& preorder,int &ind,int mn,int mx)
+    {
+        int curr=ind;
+        if(ind>=preorder.size())
+            return NULL;
+        int val=preorder[ind];
+        if(val<mn || val>mx)
+            return NULL;
+        TreeNode *newNode=new TreeNode(preorder[ind]);
+        ind++;
+        newNode->left=helper(preorder,ind,mn,min(val,mx));
+        newNode->right=helper(preorder,ind,max(mn,val),mx);
+        return newNode;
+    }
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        if(preorder.empty())
+            return NULL;
+        int ind=0;
+        
+        return helper(preorder,ind,INT_MIN,INT_MAX);
+        
+    }
+};
+
+//Time Complexity=O(n)
+//Space Complexity=O(n) , for skewed tree
