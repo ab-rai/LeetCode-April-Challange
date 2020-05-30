@@ -1,0 +1,90 @@
+// Premium Question
+
+class FirstUnique {
+public:
+    class doublyLinkedList{
+        public:
+        int val;
+        doublyLinkedList * prev,*next;
+        doublyLinkedList(int value)
+        {
+            prev=next=NULL;
+            val=value;
+        }
+    };
+    doublyLinkedList *head=NULL,*tail=NULL;
+    
+    doublyLinkedList* insertNode(int value)
+    {
+        doublyLinkedList *newNode=new doublyLinkedList(value);
+        if(head==NULL && tail==NULL)
+        {
+            head=newNode;
+            tail=newNode;
+            
+        }
+        else
+        {
+            tail->next=newNode;
+            newNode->prev=tail;
+            tail=newNode;
+        }
+        return newNode;
+    }
+    void deleteNode(doublyLinkedList * curr)
+    {
+        if(curr==head && curr==tail)
+        {
+            head=NULL;
+            tail=NULL;
+        }
+        else if(curr==head)
+        {
+            head->next->prev=NULL;
+            head=head->next;
+        }
+        else if(curr==tail)
+        {
+            tail=tail->prev;
+            tail->next=NULL;
+        }
+        else
+        {
+            curr->prev->next=curr->next;
+            curr->next->prev=curr->prev;
+        }
+       
+    }
+    map<int,doublyLinkedList *> mp; // keep it above
+    
+    FirstUnique(vector<int>& nums) {
+        for(int num:nums)
+        {
+            this->add(num);
+        }
+    }
+    
+    int showFirstUnique() {
+        if(head==NULL)
+        return -1;
+        else return head->val;
+    }
+    
+    void add(int value) {
+        if(mp.find(value)==mp.end())
+            mp[value]=insertNode(value);
+        else
+        {
+            if(mp[value]!=NULL)
+           { deleteNode(mp[value]);
+            mp[value]=NULL;}
+        }
+    }
+};
+
+/**
+ * Your FirstUnique object will be instantiated and called as such:
+ * FirstUnique* obj = new FirstUnique(nums);
+ * int param_1 = obj->showFirstUnique();
+ * obj->add(value);
+ */
