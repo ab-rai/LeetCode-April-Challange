@@ -1,0 +1,37 @@
+// Premium Question
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool helper(TreeNode* root, vector<int>& arr,int currInd) {
+        if(currInd>=arr.size())
+            return false;
+        if(root==NULL)  return false;
+        if(root->val!=arr[currInd])
+            return false;
+        if(root->left==NULL && root->right==NULL)
+        {
+            if(arr[currInd]==root->val && currInd==arr.size()-1)
+                return true;
+            else return false;
+        }
+        
+        bool l=helper(root->left,arr,currInd+1);
+        bool r=helper(root->right,arr,currInd+1);
+        return l||r;
+    }
+    bool isValidSequence(TreeNode* root, vector<int>& arr) {
+        if(arr.empty()) return true;
+        if(root==NULL)  return false;
+        return helper(root,arr,0);
+    }
+};
