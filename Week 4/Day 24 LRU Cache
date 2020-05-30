@@ -1,0 +1,110 @@
+Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and put.
+
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity,
+it should invalidate the least recently used item before inserting a new item.
+
+The cache is initialized with a positive capacity.
+
+Follow up:
+Could you do both operations in O(1) time complexity?
+
+class LRUCache {
+public:
+    
+    class doublyLinkedList{
+        public:
+        int val;
+        int key;
+        doublyLinkedList * next;
+        doublyLinkedList * prev;
+        doublyLinkedList(int k,int v)// try with val
+        {
+            key=k;
+            val=v;
+            next=NULL;
+            prev=NULL;
+        }
+    };
+    doublyLinkedList * head=NULL;
+    doublyLinkedList * tail=NULL;
+    
+    int maxSize;
+    map<int,doublyLinkedList*> mp;
+    
+    LRUCache(int capacity) {
+        maxSize=capacity;
+    }
+    
+    int get(int key) {
+        if(mp.find(key)==mp.end())
+            return -1;
+        doublyLinkedList *curr=mp[key];
+        if(maxSize==1 ||(curr==head && curr==tail))
+            return curr->val;
+        else if(curr==head)
+        {
+            curr->next->prev=NULL;
+            curr->prev=tail;
+            head=curr->next;
+            curr->next=NULL;
+            tail->next=curr;
+            tail=curr;
+        }
+        else if(curr!=tail)
+        {
+            curr->next->prev=curr->prev;
+            curr->prev->next=curr->next;
+            curr->prev=tail;
+            curr->next=NULL;
+            tail->next=curr;
+            tail=curr;
+        }
+        return curr->val;   
+    }
+    
+    void put(int key, int value) {
+        if(mp.find(key)!=mp.end())
+        {
+            int retVal=get(key);
+            mp[key]->val=value;
+            return;   
+        }
+        if(mp.size()<maxSize)
+        {
+            doublyLinkedList *newNode=new doublyLinkedList(key,value);
+            if(head==NULL && tail==NULL)
+            {
+                newNode->prev=NULL;
+                newNode->next=NULL;
+                head=newNode;
+                tail=newNode;
+            }
+            else
+            {
+                newNode->prev=tail;
+                tail->next=newNode;
+                tail=newNode;
+                
+            }
+            mp[key]=newNode;
+        }
+        else
+        {
+            doublyLinkedList *newNode=new doublyLinkedList(key,value);
+            tail->next=newNode;
+            newNode->prev=tail;
+            tail=newNode;
+            mp.erase(head->key);
+            head=head->next;
+            mp[key]=newNode;
+        }
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
